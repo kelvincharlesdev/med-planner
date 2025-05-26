@@ -107,12 +107,16 @@ export const patientsTable = pgTable("patients", {
     .$onUpdate(() => new Date()),
 });
 
-export const patientsTableRelations = relations(patientsTable, ({ one }) => ({
-  clinic: one(clinicsTable, {
-    fields: [patientsTable.clinicId],
-    references: [clinicsTable.id],
+export const patientsTableRelations = relations(
+  patientsTable,
+  ({ one, many }) => ({
+    clinic: one(clinicsTable, {
+      fields: [patientsTable.clinicId],
+      references: [clinicsTable.id],
+    }),
+    appointments: many(appointmentsTable),
   }),
-}));
+);
 
 export const appointmentsTable = pgTable("appointments", {
   id: uuid("id").defaultRandom().primaryKey(),
